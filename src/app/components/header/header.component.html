@@ -1,8 +1,14 @@
-<!-- src/app/components/header/header.component.html -->
 <header>
-    <h1>Currency Converter</h1>
-    <div>
-      <p>USD to UAH: {{ usdToUah}}</p>
-      <p>EUR to UAH: {{ eurToUah}}</p>
+    <h1>Exchange Rate Tracker</h1>
+    <div class="rates" *ngIf="rates$ | async as data; else loading">
+      <div *ngFor="let currency of currencies" class="rate">
+        <span class="currency-icon">{{ getCurrencyIcon(currency) }}</span>
+        <p>{{ currency }} to UAH: {{ convertToUAH(data, currency) | number:'1.2-2' }}</p>
+      </div>
     </div>
+    <ng-template #loading>
+      <div class="loading">
+        <p>Loading exchange rates...</p>
+      </div>
+    </ng-template>
   </header>
