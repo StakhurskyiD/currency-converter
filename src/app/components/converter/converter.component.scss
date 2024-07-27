@@ -1,0 +1,47 @@
+.converter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .currency-input {
+    margin: 0 1rem;
+    display: flex;
+    flex-direction: column;
+  
+    input,
+    select {
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+  
+    input {
+      width: 200px;
+    }
+  
+    select {
+      width: 220px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .converter {
+      flex-direction: column;
+    }
+  
+    .currency-input {
+      margin: 1rem 0;
+  
+      input,
+      select {
+        width: 100%;
+      }
+    }
+  }
