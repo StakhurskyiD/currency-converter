@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [HeaderComponent, ConverterComponent, CryptoChartComponent]
+  imports: [HeaderComponent, ConverterComponent, CryptoChartComponent, CryptoChartComponent]
 })
 export class AppComponent {
   title = 'currency-converter';

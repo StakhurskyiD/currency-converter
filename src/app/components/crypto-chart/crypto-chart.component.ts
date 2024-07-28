@@ -1,10 +1,10 @@
+// src/app/components/crypto-chart/crypto-chart.component.ts
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgxChartsModule, Color, ScaleType } from '@swimlane/ngx-charts';
 import { MatCardModule } from '@angular/material/card';
-import { catchError, timeout } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { CryptoDataService } from '../../services/crypto-data.service';
 
 @Component({
   selector: 'app-crypto-chart',
@@ -39,7 +39,7 @@ export class CryptoChartComponent implements OnInit {
   yAxisLabel: string = 'Market Cap (USD)';
   animations: boolean = true;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private http: HttpClient) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private cryptoDataService: CryptoDataService) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -50,19 +50,10 @@ export class CryptoChartComponent implements OnInit {
   }
 
   fetchCryptoData() {
-    const apiUrl = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false';
-    this.http.get<any[]>(apiUrl)
-      .pipe(
-        timeout(10000),
-        catchError(error => {
-          console.error('Error fetching rates:', error);
-          return of([]);
-        })
-      )
-      .subscribe(data => {
-        this.cryptoData = data;
-        this.updateChartData();
-      });
+    this.cryptoDataService.getCryptoData().subscribe((data: any[]) => {
+      this.cryptoData = data;
+      this.updateChartData();
+    });
   }
 
   updateChartData() {
