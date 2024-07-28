@@ -1,0 +1,22 @@
+<div class="crypto-container">
+  <h2>Top 10 Cryptocurrencies</h2>
+  <div class="crypto-list">
+    <div *ngFor="let crypto of cryptoData" class="crypto-item">
+      <span>{{ crypto.name }} ({{ crypto.symbol.toUpperCase() }}): {{ crypto.current_price | currency:'USD' }}</span>
+    </div>
+  </div>
+  <ngx-charts-bar-horizontal
+    [view]="[900, 400]"
+    [scheme]="colorScheme"
+    [results]="chartData"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [animations]="animations">
+  </ngx-charts-bar-horizontal>
+</div>
