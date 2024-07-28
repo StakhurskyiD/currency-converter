@@ -3,12 +3,12 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #ecf0f1;
+  background-color: #f8f9fa;
 
   .title {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: #2c3e50;
+    color: #343a40;
   }
 
   .crypto-list {
@@ -20,75 +20,66 @@
 
   .crypto-card {
     margin: 10px;
-    padding: 15px;
-    width: 200px;
+    padding: 20px;
+    width: 220px;
     color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
 
     &:hover {
       transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     h2 {
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
+  }
+
+  .chart-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
   }
 
   .btc {
     background-color: #f7931a; /* Bitcoin */
   }
-  
+
   .eth {
     background-color: #3c3c3d; /* Ethereum */
   }
-  
+
   .usdt {
     background-color: #26a17b; /* Tether */
   }
-  
+
   .bnb {
     background-color: #f0b90b; /* BNB */
   }
-  
+
   .sol {
     background-color: #3c3c3d; /* Solana */
   }
-  
+
   .usdc {
     background-color: #2775ca; /* USDC */
   }
-  
+
   .xrp {
     background-color: #00aae4; /* XRP */
   }
-  
+
   .steth {
     background-color: #5a5f64; /* Lido Staked Ether */
   }
-  
+
   .doge {
     background-color: #ba9f33; /* Dogecoin */
   }
-  
+
   .ton {
     background-color: #2a9efb; /* Toncoin */
   }
-
-  ngx-charts-bar-horizontal {
-    width: 100%;
-    height: 800px;
-
-    .x-axis, .y-axis {
-      text {
-        font-size: 1.2rem;
-        fill: #555;
-      }
-    }
-
-    .legend-label {
-      font-size: 1.2rem;
-    }
-  }
 }
-
