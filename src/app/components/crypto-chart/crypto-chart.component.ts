@@ -28,7 +28,7 @@ export class CryptoChartComponent implements OnInit {
     name: 'custom',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    domain: ['#f7931a', '#3c3c3d', '#26a17b', '#f0b90b', '#00ff9b', '#2775ca', '#00aae4', '#5a5f64', '#ba9f33', '#2a9efb']
   };
   gradient: boolean = false;
   showXAxis: boolean = true;

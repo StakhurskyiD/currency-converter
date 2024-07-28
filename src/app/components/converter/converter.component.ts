@@ -34,16 +34,20 @@ export class ConverterComponent implements OnInit {
   }
 
   convertFromLeftAmount() {
-    if (this.rates[this.currencyLeft] && this.amountLeft) {
-      const rate = this.rates[this.currencyLeft][this.currencyRight];
-      this.amountRight = this.amountLeft * rate;
+    if (this.amountLeft !== undefined && this.amountLeft >= 0) {
+      if (this.rates[this.currencyLeft]) {
+        const rate = this.rates[this.currencyLeft][this.currencyRight];
+        this.amountRight = this.amountLeft * rate;
+      }
     }
   }
 
   convertFromRightAmount() {
-    if (this.rates[this.currencyRight] && this.amountRight) {
-      const rate = this.rates[this.currencyRight][this.currencyLeft];
-      this.amountLeft = this.amountRight * rate;
+    if (this.amountRight !== undefined && this.amountRight >= 0) {
+      if (this.rates[this.currencyRight]) {
+        const rate = this.rates[this.currencyRight][this.currencyLeft];
+        this.amountLeft = this.amountRight * rate;
+      }
     }
   }
 }

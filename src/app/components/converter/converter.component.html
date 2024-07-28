@@ -1,32 +1,34 @@
 <div class="converter-container">
-    <h2>Calculate Exchange Rates</h2>
-    <div class="converter">
-      <div class="currency-input">
-        <input
-          type="number"
-          [(ngModel)]="amountLeft"
-          (input)="convertFromLeftAmount()"
-          placeholder="Enter amount"
-        />
-        <select [(ngModel)]="currencyLeft" (change)="convertFromLeftAmount()">
-          <option *ngFor="let currency of currencies" [value]="currency">
-            {{ currency }}
-          </option>
-        </select>
-      </div>
-    
-      <div class="currency-input">
-        <input
-          type="number"
-          [(ngModel)]="amountRight"
-          (input)="convertFromRightAmount()"
-          placeholder="Enter amount"
-        />
-        <select [(ngModel)]="currencyRight" (change)="convertFromRightAmount()">
-          <option *ngFor="let currency of currencies" [value]="currency">
-            {{ currency }}
-          </option>
-        </select>
-      </div>
+  <h2>Calculate Exchange Rates</h2>
+  <div class="converter">
+    <div class="currency-input">
+      <input
+        type="number"
+        [(ngModel)]="amountLeft"
+        (input)="convertFromLeftAmount()"
+        [min]="0"
+        placeholder="Enter amount"
+      />
+      <select [(ngModel)]="currencyLeft" (change)="convertFromLeftAmount()">
+        <option *ngFor="let currency of currencies" [value]="currency">
+          {{ currency }}
+        </option>
+      </select>
+    </div>
+
+    <div class="currency-input">
+      <input
+        type="number"
+        [(ngModel)]="amountRight"
+        (input)="convertFromRightAmount()"
+        [min]="0"
+        placeholder="Enter amount"
+      />
+      <select [(ngModel)]="currencyRight" (change)="convertFromRightAmount()">
+        <option *ngFor="let currency of currencies" [value]="currency">
+          {{ currency }}
+        </option>
+      </select>
     </div>
   </div>
+</div>
