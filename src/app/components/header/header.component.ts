@@ -1,3 +1,4 @@
+// src/app/components/header/header.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CurrencyService } from '../../services/currency.service';
@@ -24,12 +25,11 @@ export class HeaderComponent implements OnInit {
     this.fetchRates();
   }
 
-  fetchRates() {
+  fetchRates(): void {
     this.rates$ = this.currencyService.getRates('USD').pipe(
-      map((data) => {
-        const rates = data.rates;
-        const uahRate = rates['UAH'];
+      map((rates) => {
         const convertedRates: { [key: string]: number } = {};
+        const uahRate = rates['UAH'];
         for (const currency in rates) {
           convertedRates[currency] = uahRate / rates[currency];
         }

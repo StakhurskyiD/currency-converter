@@ -1,0 +1,13 @@
+<div class="currency-input">
+  <input
+    type="number"
+    [formControl]="control"
+    [min]="0"
+    placeholder="Enter amount"
+  />
+  <select [formControl]="currencyControl">
+    <option *ngFor="let currency of currencies" [value]="currency">
+      {{ currency }}
+    </option>
+  </select>
+</div>
