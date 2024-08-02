@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { CurrencyService } from '../../services/currency.service';
 import { Currency } from '../../models/currency.enum';
 import { CurrencyInputComponent } from '../currency-input/currency-input.component';
@@ -13,7 +13,7 @@ import { CurrencyInputComponent } from '../currency-input/currency-input.compone
   imports: [CommonModule, ReactiveFormsModule, CurrencyInputComponent]
 })
 export class ConverterComponent implements OnInit {
-  currencies = Object.values(Currency);
+  currencies: string[] = Object.values(Currency);
   form!: FormGroup;
   rates: { [key: string]: { [key: string]: number } } = {};
   lastUpdatedControl: 'amountLeft' | 'amountRight' | null = null;
@@ -22,41 +22,38 @@ export class ConverterComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      amountLeft: new FormControl({ value: 0, currency: Currency.USD }),
-      amountRight: new FormControl({ value: 0, currency: Currency.UAH })
+      amountLeft: new FormControl({ value: null, currency: Currency.USD }),
+      amountRight: new FormControl({ value: null, currency: Currency.UAH })
     });
 
     this.fetchRates();
 
-    this.form.controls['amountLeft'].valueChanges.subscribe((value) => {
-      this.lastUpdatedControl = 'amountLeft';
+    this.setupValueChanges(this.form.controls['amountLeft'], 'amountLeft');
+    this.setupValueChanges(this.form.controls['amountRight'], 'amountRight');
+  }
+
+  setupValueChanges(control: AbstractControl, controlName: 'amountLeft' | 'amountRight'): void {
+    control.valueChanges.subscribe(value => {
+      this.lastUpdatedControl = controlName;
       this.convert();
     });
 
-    this.form.controls['amountRight'].valueChanges.subscribe((value) => {
-      this.lastUpdatedControl = 'amountRight';
-      this.convert();
-    });
-
-    this.form.controls['amountLeft'].get('currency')?.valueChanges.subscribe(() => {
-      this.convert();
-    });
-
-    this.form.controls['amountRight'].get('currency')?.valueChanges.subscribe(() => {
+    control.get('currency')?.valueChanges.subscribe(() => {
       this.convert();
     });
   }
 
   fetchRates(): void {
-    this.currencies.forEach((currency) => {
-      this.currencyService.getRates(currency).subscribe((data) => {
+    this.currencies.forEach(currency => {
+      this.currencyService.getRates(currency).subscribe(data => {
         this.rates[currency] = data;
       });
     });
   }
 
   convert(): void {
-    const { amountLeft, amountRight } = this.form.value;
+    const amountLeft = this.form.controls['amountLeft'].value;
+    const amountRight = this.form.controls['amountRight'].value;
 
     if (this.lastUpdatedControl === 'amountLeft') {
       const rate = this.getRate(amountLeft.currency, amountRight.currency);
@@ -68,30 +65,24 @@ export class ConverterComponent implements OnInit {
   }
 
   getRate(fromCurrency: string, toCurrency: string): number {
-    return this.rates[fromCurrency][toCurrency] || 1;
+    return this.rates[fromCurrency]?.[toCurrency] || 1;
   }
 
   updateAmountRight(amountLeft: number, rate: number): void {
-    this.form.patchValue(
-      {
-        amountRight: {
-          value: amountLeft * rate,
-          currency: this.form.controls['amountRight'].value.currency
-        }
-      },
-      { emitEvent: false }
-    );
+    this.form.patchValue({
+      amountRight: {
+        value: amountLeft * rate,
+        currency: this.form.controls['amountRight'].value.currency
+      }
+    }, { emitEvent: false });
   }
 
   updateAmountLeft(amountRight: number, rate: number): void {
-    this.form.patchValue(
-      {
-        amountLeft: {
-          value: amountRight * rate,
-          currency: this.form.controls['amountLeft'].value.currency
-        }
-      },
-      { emitEvent: false }
-    );
+    this.form.patchValue({
+      amountLeft: {
+        value: amountRight * rate,
+        currency: this.form.controls['amountLeft'].value.currency
+      }
+    }, { emitEvent: false });
   }
 }

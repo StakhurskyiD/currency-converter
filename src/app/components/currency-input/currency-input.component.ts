@@ -18,30 +18,33 @@ import { CommonModule } from '@angular/common';
 })
 export class CurrencyInputComponent implements ControlValueAccessor, OnInit {
   @Input() currencies: string[] = [];
-  @Input() currency!: string;
+  @Input() currency: string = '';
 
-  control = new FormControl();
-  currencyControl = new FormControl(this.currency);
+  control: FormControl = new FormControl();
+  currencyControl: FormControl = new FormControl(this.currency);
 
-  onChange = (value: any) => {};
-  onTouched = () => {};
+  onChange: (value: any) => void = () => {};
+  onTouched: () => void = () => {};
 
   ngOnInit() {
     this.control.valueChanges.subscribe(value => {
-      this.onChange({ value, currency: this.currencyControl.value });
+      this.onChange({ value: value === '' ? null : value, currency: this.currencyControl.value });
       this.onTouched();
     });
 
     this.currencyControl.valueChanges.subscribe(value => {
-      this.onChange({ value: this.control.value, currency: value });
+      this.onChange({ value: this.control.value === '' ? null : this.control.value, currency: value });
       this.onTouched();
     });
   }
 
   writeValue(value: any): void {
-    if (value) {
-      this.control.setValue(value.value, { emitEvent: false });
+    if (value && typeof value === 'object' && value.hasOwnProperty('value') && value.hasOwnProperty('currency')) {
+      this.control.setValue(value.value === 0 ? '' : value.value, { emitEvent: false });
       this.currencyControl.setValue(value.currency, { emitEvent: false });
+    } else {
+      this.control.setValue(value === 0 ? '' : value, { emitEvent: false });
+      this.currencyControl.setValue(this.currency, { emitEvent: false });
     }
   }
 

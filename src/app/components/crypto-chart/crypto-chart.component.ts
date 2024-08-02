@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxChartsModule, Color, ScaleType } from '@swimlane/ngx-charts';
 import { MatCardModule } from '@angular/material/card';
 import { CryptoDataService } from '../../services/crypto-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-crypto-chart',
@@ -21,7 +22,9 @@ export class CryptoChartComponent implements OnInit {
   cryptoData: any[] = [];
   chartData: any[] = [];
   isBrowser: boolean;
+  subscription!: Subscription;
 
+  // Chart configuration
   showLegend: boolean = true;
   colorScheme: Color = {
     name: 'custom',
@@ -38,7 +41,10 @@ export class CryptoChartComponent implements OnInit {
   yAxisLabel: string = 'Market Cap (USD)';
   animations: boolean = true;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private cryptoDataService: CryptoDataService) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private cryptoDataService: CryptoDataService
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -48,17 +54,26 @@ export class CryptoChartComponent implements OnInit {
     }
   }
 
-  fetchCryptoData() {
-    this.cryptoDataService.getCryptoData().subscribe((data: any[]) => {
-      this.cryptoData = data;
-      this.updateChartData();
-    });
+  fetchCryptoData(): void {
+    this.subscription = this.cryptoDataService.getCryptoData().subscribe(
+      (data: any[]) => {
+        this.cryptoData = data;
+        this.updateChartData();
+      },
+      (error) => console.error('Error fetching crypto data', error)
+    );
   }
 
-  updateChartData() {
+  updateChartData(): void {
     this.chartData = this.cryptoData.map(crypto => ({
       name: crypto.name,
       value: crypto.market_cap
     }));
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
